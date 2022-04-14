@@ -16,6 +16,23 @@ def run_batch(foma_input, test_cases):
 
 	return lines
 
+def try_option(rules):
+	foma_input = '\n'.join((*before, *rules, *after))
+	answers = run_batch(foma_input, queries)
+
+	wrong = 0
+	for i in range(len(queries)):
+		if correct[i] != answers[i]:
+			wrong += 1
+
+	return wrong
+
+def do_compute(x):
+	return (try_option(x), x)
+
+if __name__ != '__main__':
+	sys.exit()
+
 import json
 with open('dataset_finnish.json', 'r') as fd:
 	data = json.load(fd)
@@ -41,20 +58,59 @@ allpossible = list(itertools.permutations(rules, len(rules)))
 
 print(f"Searching for an optimal feed/bleed order amongst {len(rules)} rules ({len(allpossible)} orderings)")
 
-def try_option(rules):
-	foma_input = '\n'.join(before + rules + after)
-	answers = run_batch(foma_input, queries)
+param_nproc = 12
+param_population_size = param_nproc * 8
+param_duplicate_best = 8
+param_mutation_count = param_population_size
 
-	ok = True
-	for i, query in enumerate(queries):
-		if correct[i] != answers[i]:
-			# print(f"Item {query:15} wrong: should be {correct[i]:10}, was {answers[i]:10}")
-			ok = False
+population = [list(rules) for _ in range(param_population_size)]
+for x in population:
+	random.shuffle(x)
 
-	if ok:
+import sys, multiprocessing
+
+generation = 0
+
+pool = multiprocessing.Pool(param_nproc)
+
+while True:
+	scored = list(pool.imap_unordered(do_compute, population, int(param_population_size/param_nproc)))
+	scored.sort(key = lambda x: x[0])
+	best = scored[0]
+
+	if best[0] == 0:
 		print("Success! Ordering:")
-		print("\n".join(" > " + x for x in rules))
+		print("\n".join(" > " + x for x in best[1]))
+		break
 
-from multiprocessing import Pool
-with Pool() as p:
-	res = list(p.imap_unordered(try_option, allpossible))
+	rest = scored[1:]
+
+	print(f"Generation {generation:3}: best score {best[0]}")
+	# print(f"Scores: {[x[0] for x in scored]}")
+	generation += 1
+
+	for _ in range(param_duplicate_best):
+		rest.insert(0, [best[0], list(best[1])])
+
+	rest = rest[:param_population_size]
+
+	for item in rest:
+		if item[0] == len(queries):
+			# Has nothing going for it, shuffle
+			random.shuffle(item[1])
+
+	for _ in range(param_mutation_count):
+		victim = random.choice(rest)[1]
+		shuf_a = random.randint(0, len(victim) - 1)
+		shuf_b = random.randint(0, len(victim) - 1)
+		if shuf_a == shuf_b:
+			continue
+		temp = victim[shuf_a]
+		victim[shuf_a] = victim[shuf_b]
+		victim[shuf_b] = temp
+
+	population = [best[1]] + [x[1] for x in rest]
+
+
+# Interesting thing to do: try all permutations, find which relative ordering constraints
+# actually matter and which don't, e.g. in finnish case.
