@@ -1,0 +1,41 @@
+{
+     "tallrik+Sg"     : "tallrik",
+     "tallrik+Pl"     : "tallrikar",
+     "tallrik+Sg+Def" : "tallriken",
+     "tallrik+Pl+Def" : "tallrikarna",
+
+     "kopp+Sg"        : "kopp",
+     "kopp+Pl"        : "koppar",
+     "kopp+Sg+Def"    : "koppen",
+     "kopp+Pl+Def"    : "kopparna",
+
+     "pojke+Sg"       : "pojke",
+     "pojke+Pl"       : "pojkar",
+     "pojke+Sg+Def"   : "pojken",
+     "pojke+Pl+Def"   : "pojkarna",
+
+     "kille+Sg"       : "kille",
+     "kille+Pl"       : "killar",
+     "kille+Sg+Def"   : "killen",
+     "kille+Pl+Def"   : "killarna",
+     
+     "killer+Sg"      : "kille",
+     "kille+Pl"       : "killar",
+     "kille+Sg+Def"   : "killen",
+     "kille+Pl+Def"   : "killarna",
+
+     "lök+Sg"         : "lök",
+     "lök+Pl"         : "lökar",
+     "lök+Sg+Def"     : "löken",
+     "lök+Pl+Def"     : "lökarna",
+
+     "vitlök+Sg"         : "vitlök",
+     "vitlök+Pl"         : "vitlökar",
+     "vitlök+Sg+Def"     : "vitlöken",
+     "vitlök+Pl+Def"     : "vitlökarna",
+
+     "förhandling+Sg"         : "förhandling",
+     "förhandling+Pl"         : "förhandlingar",
+     "förhandling+Sg+Def"     : "förhandlingen",
+     "förhandling+Pl+Def"     : "förhandlingarna"
+}
