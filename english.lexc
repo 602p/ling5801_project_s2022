@@ -15,6 +15,7 @@ fox   Ninf;
 panic Ninf;
 try   Ninf;
 watch Ninf;
+abaciscus  Ninf;
 
 LEXICON Verb
 
@@ -29,6 +30,7 @@ LEXICON Ninf
 
 +N+Sg:0   #;
 +N+Pl:^s  #;
++N+Poss:^'s #;
 
 LEXICON Vinf
 

@@ -35,6 +35,9 @@ if __name__ != '__main__':
 
 json_file_name = 'dataset_finnish.json'
 foma_file_name = 'finnish.metafoma'
+if len(sys.argv) == 2:
+    if sys.argv[1] == "-h":
+        print(f"usage: python {sys.argv[0]} (json_test_data_filename) (metafoma_filename)")
 if len(sys.argv) >= 3:
 	json_file_name = sys.argv[1]
 	foma_file_name = sys.argv[2]

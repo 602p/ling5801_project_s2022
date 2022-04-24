@@ -26,6 +26,7 @@ define DeleteBoundaries [ {^} -> 0] ;
 
 
 #This is a less than ideal example for the rule ordering, but seems like a good canadite for fixing rules
+#If needed I could add more rules by also adding e.g conjugation.
 define Rules [ 0 -> 0 ]           # No-op transducer, allows commenting out arbitrary lines below
 #%%METAFOMA begin permute rules%%#
          .o. RealizeDefMarkerEA
