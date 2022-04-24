@@ -1,0 +1,61 @@
+{
+     "tallrik+Sg+Indef": "tallrik",
+     "tallrik+Pl+Indef": "tallrikar",
+     "tallrik+Sg+Def" : "tallriken",
+     "tallrik+Pl+Def" : "tallrikarna",
+
+     "kopp+Sg+Indef"  : "kopp",
+     "kopp+Pl+Indef"  : "koppar",
+     "kopp+Sg+Def"    : "koppen",
+     "kopp+Pl+Def"    : "kopparna",
+
+     "pojke+Sg+Indef" : "pojke",
+     "pojke+Pl+Indef" : "pojkar",
+     "pojke+Sg+Def"   : "pojken",
+     "pojke+Pl+Def"   : "pojkarna",
+
+     "kille+Sg+Indef" : "kille",
+     "kille+Pl+Indef" : "killar",
+     "kille+Sg+Def"   : "killen",
+     "kille+Pl+Def"   : "killarna",
+
+     "loek+Sg+Indef"   : "loek",
+     "loek+Pl+Indef"   : "loekar",
+     "loek+Sg+Def"     : "loeken",
+     "loek+Pl+Def"     : "loekarna",
+
+     "vitloek+Sg+Indef": "vitloek",
+     "vitloek+Pl+Indef": "vitloekar",
+     "vitloek+Sg+Def"  : "vitloeken",
+     "vitloek+Pl+Def"  : "vitloekarna",
+
+     "foerhandling+Sg+Indef": "foerhandling",
+     "foerhandling+Pl+Indef": "foerhandlingar",
+     "foerhandling+Sg+Def": "foerhandlingen",
+     "foerhandling+Pl+Def": "foerhandlingarna",
+
+     "flicka+Sg+Indef": "flicka",
+     "flicka+Pl+Indef": "flickor",
+     "flicka+Sg+Def"  : "flickan",
+     "flicka+Pl+Def"  : "flickorna",
+
+     "groda+Sg+Indef" : "groda",
+     "groda+Pl+Indef" : "grodor",
+     "groda+Sg+Def"   : "grodan",
+     "groda+Pl+Def"   : "grodorna",
+
+     "laexa+Sg+Indef"  : "laexa",
+     "laexa+Pl+Indef"  : "laexor",
+     "laexa+Sg+Def"    : "laexan",
+     "laexa+Pl+Def"    : "laexorna",
+
+     "hund+Sg+Indef"  : "hund",
+     "hund+Pl+Indef"  : "hundar",
+     "hund+Sg+Def"    : "hunden",
+     "hund+Pl+Def"    : "hundarna",
+
+     "gris+Sg+Indef"  : "gris",
+     "gris+Pl+Indef"  : "grisar",
+     "gris+Sg+Def"    : "grisen",
+     "gris+Pl+Def"    : "grisarna"
+}

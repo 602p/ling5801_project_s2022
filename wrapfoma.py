@@ -1,4 +1,4 @@
-import shutil, subprocess, os
+import shutil, subprocess, os, sys
 
 foma_path = shutil.which('foma')
 if foma_path is None:
@@ -33,14 +33,20 @@ def do_compute(x):
 if __name__ != '__main__':
 	sys.exit()
 
+json_file_name = 'dataset_finnish.json'
+foma_file_name = 'finnish.metafoma'
+if len(sys.argv) >= 3:
+	json_file_name = sys.argv[1]
+	foma_file_name = sys.argv[2]
+
 import json
-with open('dataset_finnish.json', 'r') as fd:
+with open(json_file_name, 'r') as fd:
 	data = json.load(fd)
 
 queries = list(data.keys())
 correct = list(data.values())
 
-with open('finnish.metafoma', 'r') as fd:
+with open(foma_file_name, 'r') as fd:
 	contents = fd.read().split('\n')
 
 p_start = contents.index('#%%METAFOMA begin permute rules%%#')
@@ -67,7 +73,7 @@ population = [list(rules) for _ in range(param_population_size)]
 for x in population:
 	random.shuffle(x)
 
-import sys, multiprocessing
+import multiprocessing
 
 generation = 0
 
