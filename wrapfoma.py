@@ -10,7 +10,7 @@ def run_batch(foma_input, test_cases):
 	os.write(w, foma_input.encode('utf8'))
 	os.close(w)
 
-	with subprocess.Popen([foma_path, '-p'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True, pass_fds=[r]) as proc:
+	with subprocess.Popen([foma_path, '-p'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, pass_fds=[r]) as proc:
 		stdout, _ = proc.communicate('source /dev/fd/'+str(r)+'\necho --READY--\ndown\n' + queries + "\nEND;\nexit\n", 0.5)
 		lines = stdout.split('\n')[-2-(len(test_cases)*2):-3:2]
 
@@ -35,9 +35,12 @@ if __name__ != '__main__':
 
 json_file_name = 'dataset_finnish.json'
 foma_file_name = 'finnish.metafoma'
+
 if len(sys.argv) == 2:
     if sys.argv[1] == "-h":
         print(f"usage: python {sys.argv[0]} (json_test_data_filename) (metafoma_filename)")
+        sys.exit()
+
 if len(sys.argv) >= 3:
 	json_file_name = sys.argv[1]
 	foma_file_name = sys.argv[2]
