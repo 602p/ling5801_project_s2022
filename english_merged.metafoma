@@ -34,12 +34,7 @@ define Lexicon
 
 define Grammar Lexicon
 #%%METAFOMA begin permute rules%%#
-               .o. ConsonantDoubling
-               .o. EDeletion
-               .o. EInsertion
-               .o. YReplacement
-               .o. KInsertion
-               .o. PossessivePlural
+               .o. (ConsonantDoubling ,, EDeletion ,, EInsertion ,, YReplacement ,, KInsertion ,, PossessivePlural)
                .o. Cleanup
 #%%METAFOMA end permute rules%%#
                ;

@@ -1,0 +1,57 @@
+### Here are regular expressions for classes of things like vowels and
+### consonants to use in later expressions.
+
+define Vowel [a|e|i|o|u|I] ;
+define RoundVowel [o|u] ;
+define Consonant [b|c|d|f|g|h|j|k|l|m|n|p|q|r|s|t|v|w|x|y|z] ;
+
+### Create an FST that contains the Finnish noun stems (see finnish_nouns.txt).
+
+read text finnish_stems.txt
+define FinnishStems
+
+### Create an FST that relates underlying Number and Case values to
+### their surface realizations and concatenate it with the FST for the
+### noun stems. Number values and +Sg, +Pl and Case values are +Nom,
+### +Part. In the end you should have an FST called FinnishNouns that
+### relates forms like "maa+Pl+Part" to "maaITa".
+
+define NumberAndCase [ %+Sg%+Nom:0 | %+Sg%+Part:{^Ta} | %+Pl%+Part:{^I^Ta} ] ;
+
+define LexT FinnishStems NumberAndCase ;
+
+### Implement rules for realizing underlying forms correctly and compose them in the correct order.
+
+define RoundedVowelSyllable [ Consonant+ RoundVowel Vowel* Consonant+ ] ;
+define BiSyllabicStem [ Consonant* Vowel+ Consonant+ Vowel* ] ;
+
+define VowelRounding [ a -> o || ~RoundedVowelSyllable \a _ {^I} ] ;
+
+define VowelLowering i -> e || _ {^I} ;
+
+define RealizePluralMarker [ I -> j || Vowel {^} _ {^} Vowel ] .o. [ I -> i ] ;
+
+define RealizePartMarker [ T -> 0 || BiSyllabicStem ?* _ ] .o. [ T -> t ] ;
+
+define VowelShortening {aa} -> a, {ee} -> e, {ii} -> i, {oo} -> o, {uu} -> u,
+                       {uo} -> o,  {ie} -> e
+                       || _ {^I} ;
+
+define VowelDropping a -> 0 || RoundedVowelSyllable _ {^I} ;
+
+define DeleteBoundaries [ {^} -> 0] ;
+
+define Rules [ 0 -> 0 ]           # No-op transducer, allows commenting out arbitrary lines below
+#%%METAFOMA begin permute rules%%#
+         .o. VowelDropping
+         .o. VowelRounding
+         .o. (RealizePartMarker .o. VowelShortening .o. VowelLowering)
+         .o. RealizePluralMarker
+         .o. DeleteBoundaries
+#%%METAFOMA end permute rules%%#
+         ;
+
+### Push your final RE "FinishNouns" onto the stack, ready for use.
+
+define FinnishNouns LexT .o. Rules ;
+push FinnishNouns

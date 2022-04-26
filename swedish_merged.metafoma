@@ -1,0 +1,40 @@
+### Here are regular expressions for classes of things like vowels and
+### consonants to use in later expressions.
+
+define Vowel [a|e|i|o|u|I] ;
+define RoundVowel [o|u] ;
+define Consonant [b|c|d|f|g|h|j|k|l|m|n|p|q|r|s|t|v|w|x|y|z] ;
+
+
+read text swedish_stems.txt
+define SwedishStems
+
+
+define NumberAndDef [ %+Sg%+Indef:0 | %+Sg%+Def:{^En} | %+Pl%+Indef:{^Ar} | %+Pl%+Def:{^Arna} ] ;
+
+define LexT SwedishStems NumberAndDef ;
+
+### Implement rules for realizing underlying forms correctly and compose them in the correct order.
+
+define RealizeDefMarkerEA [ E -> 0 || a {^} _ ] .o. [E -> 0 || e {^} _];
+define RealizeDefMarkerDefault [ E -> e ] ;
+define RealizePluralMarkerDefault [ A -> a ] ;
+define RealizePluralMarkerO [ a{^}A -> o]; 
+define RealizePluralMarkerE [e{^}A -> a];
+
+define DeleteBoundaries [ {^} -> 0] ;
+
+
+#This is a less than ideal example for the rule ordering, but seems like a good canadite for fixing rules
+#If needed I could add more rules by also adding e.g conjugation.
+define Rules [ 0 -> 0 ]           # No-op transducer, allows commenting out arbitrary lines below
+#%%METAFOMA begin permute rules%%#
+         .o. (RealizeDefMarkerEA .o. RealizePluralMarkerO .o. RealizePluralMarkerE)
+         .o. (RealizeDefMarkerDefault .o. RealizePluralMarkerDefault .o. DeleteBoundaries)
+#%%METAFOMA end permute rules%%#
+         ;
+
+### Push your final RE "FinishNouns" onto the stack, ready for use.
+
+define SwedishNouns LexT .o. Rules ;
+push SwedishNouns
