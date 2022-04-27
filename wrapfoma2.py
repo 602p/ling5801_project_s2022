@@ -155,7 +155,7 @@ print(f" * Also found {len(literals)} literals of {sum(len(item[3]) for item in 
 import random, itertools, math
 
 param_nproc = 12
-param_population_size = param_nproc * 16
+param_population_size = param_nproc * 32
 param_duplicate_best = 8
 param_mutation_count = param_population_size
 

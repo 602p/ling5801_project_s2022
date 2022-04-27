@@ -1,1 +1,3 @@
 Order-arbitrary != can use ,,
+Levenshtein distance actually helps (a little)
+Score is tuple (tests wrong, total Levenshtein distance wrong, length of foma script) -> optimizing for lowest, but sorts by first tests, then lev, then len
