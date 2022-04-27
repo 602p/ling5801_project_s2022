@@ -188,7 +188,7 @@ while True:
 
 	print(f" o Generation {generation:3}: best score is {best[0][0]:2} wrong ({best[0][1]:2} Levenshtein; {best[0][2]:4} chars foma)")
 
-	if True:
+	if '--debug' in sys.argv:
 		for item in best[1]:
 			if item[1] != 'literal':
 				print(f"   d {item[1]}({', '.join(item[2])})@{item[0]}: {' '.join(x.strip() for x in item[3])}")
