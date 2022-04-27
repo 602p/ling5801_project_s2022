@@ -17,7 +17,7 @@ def run_batch(foma_input, test_cases):
 	return lines
 
 def try_option(rules):
-	foma_input = '\n'.join('\n'.join(x[-1]) for x in rules)
+	foma_input = '\n'.join('\n'.join(x[-2]) for x in rules)
 	answers = run_batch(foma_input, queries)
 
 	wrong = 0
@@ -93,9 +93,10 @@ template.append([lineno - len(current), 'literal', (), current])
 
 def prepare_exprs(args, lines):
 	lines = " ".join(lines).replace('\t', ' ')
-	return [x.strip() for x in lines.split(' ') if x.strip()]
+	exprs = [x.strip() for x in lines.split(' ') if x.strip()]
+	return exprs, exprs
 
-def permute_exprs(args, parts):
+def permute_exprs(args, parts, aux):
 	while True:
 		act = random.choice(args)
 		if act == 'kleene':
@@ -110,13 +111,19 @@ def permute_exprs(args, parts):
 					parts[item] = stripped + random.choice(new)
 					return
 		elif act == 'presence':
-			if len(parts) > 1:
-				parts.remove(random.choice(parts))
+			if random.choice((0, 1)):
+				if len(parts) > 1:
+					parts.remove(random.choice(parts))
+					return
+			else:
+				if len(parts) < len(aux):
+					parts.insert(random.randint(0, len(parts)-1), random.choice(aux))
+					return
 
 def prepare_lines(args, lines):
-	return lines
+	return lines, []
 
-def permute_lines(args, lines):
+def permute_lines(args, lines, aux):
 	shuf_a = random.randint(0, len(lines) - 1)
 	shuf_b = random.randint(0, len(lines) - 1)
 	if shuf_a == shuf_b:
@@ -126,36 +133,33 @@ def permute_lines(args, lines):
 	lines[shuf_b] = temp
 
 def prepare_literal(args, lines):
-	return lines
-
-def permute_literal(lines):
-	pass
+	return lines, []
 
 for item in template:
-	item[3] = eval('prepare_' + item[1])(item[2], item[3])
+	item[3:4] = eval('prepare_' + item[1])(item[2], item[3])
 
 literals = []
 for item in template:
 	if item[1] == 'literal':
 		literals.append(item)
 	else:
-		print(f" * Found {item[1]}({', '.join(item[2])})\t\tof {len(item[3])} {item[1]} at line {item[0]}")
+		print(f" * Found {item[1]}({', '.join(item[2])}) of {len(item[3])} {item[1]} at line {item[0]}")
 
-print(f" * Also found {len(literals)} literals\tof {sum(len(item[3]) for item in literals)} lines (total)")
+print(f" * Also found {len(literals)} literals of {sum(len(item[3]) for item in literals)} lines (total)")
 
 # print('\n'.join(map(repr, template)))
 
 import random, itertools, math
 
 param_nproc = 12
-param_population_size = param_nproc * 8
+param_population_size = param_nproc * 16
 param_duplicate_best = 8
 param_mutation_count = param_population_size
 
 def copytemplate(t):
 	new = []
 	for item in t:
-		new.append((*item[:-1], list(item[-1])))
+		new.append((*item[:-2], list(item[-2]), item[-1]))
 	return new
 
 population = [copytemplate(template) for _ in range(param_population_size)]
@@ -167,6 +171,7 @@ generation = 0
 pool = multiprocessing.Pool(param_nproc)
 
 print(f" # Searching with {param_nproc} cores and a population size of {param_population_size}")
+print()
 
 while True:
 	scored = list(pool.imap_unordered(do_compute, population, int(param_population_size/param_nproc)))
@@ -174,22 +179,17 @@ while True:
 	best = scored[0]
 
 	if best[0][0] == 0:
-		print(" # Success!")
-		for item in best[1]:
-			if item[1] != 'literal':
-				print(f" * Solved {item[1]}({', '.join(item[2])}) of {len(item[3])} {item[1]} at line {item[0]}: ")
-				if item[1] == 'lines':
-					for line in item[3]:
-						print("\t" + line.strip())
-				else:
-					print("\t" + " ".join(item[3]))
-
 		break
 
 	rest = scored[1:]
 
 	print(f" o Generation {generation:3}: best score is {best[0][0]:2} wrong ({best[0][1]:4} chars foma)")
-	# print(f"Scores: {[x[0] for x in scored]}")
+
+	if True:
+		for item in best[1]:
+			if item[1] != 'literal':
+				print(f"   d {item[1]}({', '.join(item[2])})@{item[0]}: {' '.join(x.strip() for x in item[3])}")
+
 	generation += 1
 
 	for _ in range(param_duplicate_best):
@@ -208,7 +208,17 @@ while True:
 			item = random.choice(victim)
 			if item[1] != 'literal':
 				break
-		eval('permute_' + item[1])(item[2], item[3])
+		eval('permute_' + item[1])(item[2], item[3], item[4])
 
 	population = [best[1]] + [x[1] for x in rest]
 
+print()
+print(" # Success!")
+for item in best[1]:
+	if item[1] != 'literal':
+		print(f" * Solved {item[1]}({', '.join(item[2])}) of {len(item[3])} {item[1]} at line {item[0]}: ")
+		if item[1] == 'lines':
+			for line in item[3]:
+				print("\t" + line.strip())
+		else:
+			print("\t" + " ".join(item[3]))
