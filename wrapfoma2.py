@@ -1,4 +1,5 @@
 import shutil, subprocess, os, sys
+from Levenshtein import distance as lev
 
 foma_path = shutil.which('foma')
 if foma_path is None:
@@ -21,11 +22,14 @@ def try_option(rules):
 	answers = run_batch(foma_input, queries)
 
 	wrong = 0
+	wrong_lev = 0
 	for i in range(len(queries)):
-		if correct[i] != answers[i]:
+		l = lev(correct[i], answers[i])
+		if l != 0:
 			wrong += 1
+			wrong_lev += l
 
-	return (wrong, len(foma_input))
+	return (wrong, wrong_lev, len(foma_input))
 
 def do_compute(x):
 	return (try_option(x), x)
@@ -182,7 +186,7 @@ while True:
 
 	rest = scored[1:]
 
-	print(f" o Generation {generation:3}: best score is {best[0][0]:2} wrong ({best[0][1]:4} chars foma)")
+	print(f" o Generation {generation:3}: best score is {best[0][0]:2} wrong ({best[0][1]:2} Levenshtein; {best[0][2]:4} chars foma)")
 
 	if True:
 		for item in best[1]:
