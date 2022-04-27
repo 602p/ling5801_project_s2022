@@ -24,13 +24,13 @@ define LexT FinnishStems NumberAndCase ;
 ### Implement rules for realizing underlying forms correctly and compose them in the correct order.
 
 define RoundedVowelSyllable [
-#%% permute exprs(kleene, presence) {
-    RoundVowel Vowel Consonant Consonant
+#%% permute exprs(kleene, presence, order)[minlen=1, maxlen=4] {
+    RoundVowel Vowel Consonant
 #%% }
 ] ;
 
 define BiSyllabicStem [
-#%% permute exprs(kleene, presence) {
+#%% permute exprs(kleene) {
     Consonant Vowel Consonant Vowel
 #%% }
 ] ;
@@ -42,9 +42,9 @@ define VowelLowering i -> e || _ {^I} ;
 define RealizePluralMarker [ I -> j || Vowel {^} _ {^} Vowel ] .o. [ I -> i ] ;
 
 define RealizePartMarker [
-#%% permute exprs(kleene) {
-    T -> 0 || BiSyllabicStem ? _
-#%% }
+##%% permute exprs(kleene) {
+    T -> 0 || BiSyllabicStem ?* _
+##%% }
 ] .o. [ T -> t ] ;
 
 define VowelShortening {aa} -> a, {ee} -> e, {ii} -> i, {oo} -> o, {uu} -> u,
@@ -57,10 +57,10 @@ define DeleteBoundaries [ {^} -> 0] ;
 
 define Rules [ 0 -> 0 ]           # No-op transducer, allows commenting out arbitrary lines below
 #%% permute lines(order) {
+         .o. VowelShortening
          .o. VowelLowering
          .o. VowelDropping
          .o. VowelRounding
-         .o. VowelShortening
 #%% }
          .o. RealizePartMarker
          .o. RealizePluralMarker
