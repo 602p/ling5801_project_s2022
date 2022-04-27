@@ -96,7 +96,7 @@ def prepare_exprs(args, lines):
 	exprs = [x.strip() for x in lines.split(' ') if x.strip()]
 	return exprs, exprs
 
-def permute_exprs(args, parts, aux):
+def permute(args, parts, aux):
 	while True:
 		act = random.choice(args)
 		if act == 'kleene':
@@ -119,18 +119,17 @@ def permute_exprs(args, parts, aux):
 				if len(parts) < len(aux):
 					parts.insert(random.randint(0, len(parts)-1), random.choice(aux))
 					return
+		elif act == 'order':
+			shuf_a = random.randint(0, len(parts) - 1)
+			shuf_b = random.randint(0, len(parts) - 1)
+			if shuf_a == shuf_b:
+				return
+			temp = parts[shuf_a]
+			parts[shuf_a] = parts[shuf_b]
+			parts[shuf_b] = temp
 
 def prepare_lines(args, lines):
 	return lines, []
-
-def permute_lines(args, lines, aux):
-	shuf_a = random.randint(0, len(lines) - 1)
-	shuf_b = random.randint(0, len(lines) - 1)
-	if shuf_a == shuf_b:
-		return
-	temp = lines[shuf_a]
-	lines[shuf_a] = lines[shuf_b]
-	lines[shuf_b] = temp
 
 def prepare_literal(args, lines):
 	return lines, []
@@ -208,7 +207,7 @@ while True:
 			item = random.choice(victim)
 			if item[1] != 'literal':
 				break
-		eval('permute_' + item[1])(item[2], item[3], item[4])
+		permute(item[2], item[3], item[4])
 
 	population = [best[1]] + [x[1] for x in rest]
 
