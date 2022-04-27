@@ -148,7 +148,7 @@ for item in template:
 	if item[1] == 'literal':
 		literals.append(item)
 	else:
-		print(f" * Found {item[1]}({', '.join(item[2])}) of {len(item[3])} {item[1]} at line {item[0]}")
+		print(f" * Found permute {item[1]}({', '.join(item[2])}) of {len(item[3])} {item[1]} at line {item[0]}")
 
 print(f" * Also found {len(literals)} literals of {sum(len(item[3]) for item in literals)} lines (total)")
 
@@ -219,7 +219,7 @@ print()
 print(" # Success!")
 for item in best[1]:
 	if item[1] != 'literal':
-		print(f" * Solved {item[1]}({', '.join(item[2])}) of {len(item[3])} {item[1]} at line {item[0]}: ")
+		print(f" * Solved permute {item[1]}({', '.join(item[2])}) of {len(item[3])} {item[1]} at line {item[0]}: ")
 		if item[1] == 'lines':
 			for line in item[3]:
 				print("\t" + line.strip())

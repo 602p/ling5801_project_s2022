@@ -14,8 +14,6 @@ def run_batch(foma_input, test_cases):
 		stdout, _ = proc.communicate('source /dev/fd/'+str(r)+'\necho --READY--\ndown\n' + queries + "\nEND;\nexit\n", 0.5)
 		lines = stdout.split('\n')[-2-(len(test_cases)*2):-3:2]
 
-	print(stdout, lines)
-
 	return lines
 
 def try_option(rules):
@@ -25,7 +23,7 @@ def try_option(rules):
 	wrong = 0
 	for i in range(len(queries)):
 		if correct[i] != answers[i]:
-			print("Q:", queries[i], "C:", correct[i], "A:", answers[i])
+			print("Q:", queries[i], "\tC:", correct[i], "\tA:", answers[i])
 			wrong += 1
 
 	return wrong
@@ -58,8 +56,8 @@ correct = list(data.values())
 with open(foma_file_name, 'r') as fd:
 	contents = fd.read().split('\n')
 
-p_start = contents.index('#%%METAFOMA begin permute rules%%#')
-p_end = contents.index('#%%METAFOMA end permute rules%%#')
+p_start = 1
+p_end = 2
 
 before = tuple(contents[:p_start])
 after = tuple(contents[p_end+1:])
@@ -67,4 +65,4 @@ rules = contents[p_start+1:p_end]
 
 import random, itertools, math
 
-print(do_compute(rules)[0])
+print(do_compute(rules)[0], "wrong")
