@@ -169,8 +169,6 @@ for line in contents:
 			if action == 'permute':
 				assert line.strip() == '{'
 				reading_normal = False
-				template.append(LiteralChunk(lineno - len(current), current))
-				current = []
 			elif action == 'test':
 				with open(args[0], 'r') as fd:
 					data = json.load(fd)
@@ -179,6 +177,9 @@ for line in contents:
 				correct.extend(data.values())
 
 				print(f" * Found test file({args[0]}) at line {lineno} and loaded {len(data.keys())} tests")
+
+			template.append(LiteralChunk(lineno - len(current), current))
+			current = []
 	else:
 		current.append(line)
 	lineno += 1
@@ -221,12 +222,12 @@ while True:
 	scored.sort(key = lambda x: x[0])
 	best = scored[0]
 
+	print(f" o Generation {generation:3}: best score is {best[0][0]:2} wrong ({best[0][1]:2} Levenshtein; {best[0][2]:4} chars)")
+
 	if best[0][0] == 0:
 		break
 
 	rest = scored[1:]
-
-	print(f" o Generation {generation:3}: best score is {best[0][0]:2} wrong ({best[0][1]:2} Levenshtein; {best[0][2]:4} chars)")
 
 	if '--debug' in sys.argv:
 		for item in best[1]:
