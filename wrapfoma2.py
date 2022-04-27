@@ -15,6 +15,8 @@ def run_batch(foma_input, test_cases):
 		stdout, _ = proc.communicate('source /dev/fd/'+str(r)+'\necho --READY--\ndown\n' + queries + "\nEND;\nexit\n", 1)
 		lines = stdout.split('\n')[-2-(len(test_cases)*2):-3:2]
 
+	os.close(r)
+
 	return lines
 
 def try_option(rules):
@@ -152,10 +154,10 @@ print(f" * Also found {len(literals)} literals of {sum(len(item[3]) for item in 
 
 # print('\n'.join(map(repr, template)))
 
-import random, itertools, math
+import random, itertools, math, multiprocessing
 
-param_nproc = 12
-param_population_size = param_nproc * 32
+param_nproc = multiprocessing.cpu_count() * 2
+param_population_size = param_nproc * 24
 param_duplicate_best = 8
 param_mutation_count = param_population_size
 
@@ -167,13 +169,11 @@ def copytemplate(t):
 
 population = [copytemplate(template) for _ in range(param_population_size)]
 
-import multiprocessing
-
 generation = 0
 
 pool = multiprocessing.Pool(param_nproc)
 
-print(f" # Searching with {param_nproc} cores and a population size of {param_population_size}")
+print(f" # Searching with {param_nproc} tasks ({multiprocessing.cpu_count()} cores) and a population size of {param_population_size}")
 print()
 
 while True:
