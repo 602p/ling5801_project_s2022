@@ -22,7 +22,7 @@ def do_permute(args, parts, options):
 				parts.remove(random.choice(parts))
 				return
 			elif len(parts) < options['maxlen']:
-				parts.insert(random.randint(0, len(parts)-1), random.choice(options['choices']))
+				parts.insert(random.randint(0, max(0, len(parts)-1)), random.choice(options['choices']))
 				return
 		elif act == 'order' and parts:
 			shuf_a = random.randint(0, len(parts) - 1)
@@ -35,7 +35,7 @@ def do_permute(args, parts, options):
 
 def fixup_optargs(items, optargs):
 	v = optargs.get('choices', ' '.join(items))
-	optargs['choices'] = v.split(' ')
+	optargs['choices'] = [x for x in v.split(' ') if x]
 
 	v = optargs.get('minlen', 1)
 	optargs['minlen'] = int(v)
@@ -78,7 +78,7 @@ class PermuteLinesChunk:
 		return f"lines({', '.join(self.args)})"
 
 	def dbgstate(self):
-		return ' \\n '.join(self.lines)
+		return ' \\n '.join(x.strip() for x in self.lines)
 
 	def __str__(self):
 		return f"{self.shortstr()} of {len(self.lines)} lines at line {self.lineno}"
@@ -87,7 +87,7 @@ class PermuteExprsChunk:
 	def __init__(self, lineno, args, optargs, lines, direct_exprs=None, direct_original=None):
 		self.lineno = lineno
 
-		if not direct_exprs:
+		if direct_exprs is None:
 			lines = " ".join(lines).replace('\t', ' ')
 			exprs = [x.strip() for x in lines.split(' ') if x.strip()]
 			self.exprs = exprs
