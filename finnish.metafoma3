@@ -24,15 +24,15 @@ define LexT FinnishStems NumberAndCase ;
 ### Implement rules for realizing underlying forms correctly and compose them in the correct order.
 
 define RoundedVowelSyllable [
-##%% permute exprs(kleene, presence, order)[minlen=1, maxlen=4, choices=RoundVowel Vowel Consonant] {
+#%% permute exprs(kleene) {
     Consonant+ RoundVowel Vowel* Consonant+
-##%% }
+#%% }
 ] ;
 
 define BiSyllabicStem [
-#%% permute exprs(kleene, presence, order)[minlen=1, maxlen=4, choices=RoundVowel Vowel Consonant FinnishStems] {
-    
-#%% }
+##%% permute exprs(kleene, presence, order)[minlen=1, maxlen=4, choices=RoundVowel Vowel Consonant FinnishStems] {
+    Consonant* Vowel+ Consonant+ Vowel*
+##%% }
 ] ;
 
 define VowelRounding [ a -> o || ~RoundedVowelSyllable \a _ {^I} ] ;
