@@ -55,16 +55,16 @@ define VowelDropping a -> 0 || RoundedVowelSyllable _ {^I} ;
 
 define DeleteBoundaries [ {^} -> 0] ;
 
-define Rules [ 0 -> 0 ]           # No-op transducer, allows commenting out arbitrary lines below
+define Rules [ 0 -> 0 ]                      # No-op transducer, allows commenting out arbitrary lines below
 #%% permute lines(order) {
          .o. VowelDropping
          .o. VowelRounding
+         .o. RealizePartMarker
+         .o. DeleteBoundaries
          .o. VowelLowering
          .o. VowelShortening
-#%% }
-         .o. RealizePartMarker
          .o. RealizePluralMarker
-         .o. DeleteBoundaries
+#%% }
          ;
 
 ### Push your final RE "FinishNouns" onto the stack, ready for use.

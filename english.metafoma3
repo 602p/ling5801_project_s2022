@@ -35,13 +35,13 @@ define Lexicon
 
 define Grammar Lexicon
 #%% permute lines(order) {
-               .o. Cleanup
-               .o. YReplacement
-               .o. PossessivePlural
-               .o. ConsonantDoubling
-               .o. EDeletion
-               .o. EInsertion
-               .o. KInsertion
+    .o. KInsertion
+    .o. YReplacement
+    .o. PossessivePlural
+    .o. ConsonantDoubling
+    .o. EDeletion
+    .o. EInsertion
+    .o. Cleanup
 #%% }
                ;
 
