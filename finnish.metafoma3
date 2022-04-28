@@ -49,7 +49,7 @@ define VowelDropping a -> 0 || RoundedVowelSyllable _ {^I} ;
 
 define DeleteBoundaries [ {^} -> 0] ;
 
-define Rules [ 0 -> 0 ]           # No-op transducer, allows commenting out arbitrary lines below
+define Rules [ 0 -> 0 ]
 #%% permute lines(order) {
     .o. VowelLowering
     .o. RealizePartMarker
