@@ -59,12 +59,12 @@ define Rules [ 0 -> 0 ]                      # No-op transducer, allows commenti
 #%% permute lines(order) {
          .o. VowelDropping
          .o. VowelRounding
-         .o. RealizePartMarker
-         .o. DeleteBoundaries
          .o. VowelLowering
          .o. VowelShortening
-         .o. RealizePluralMarker
 #%% }
+         .o. RealizePartMarker
+         .o. RealizePluralMarker
+         .o. DeleteBoundaries
          ;
 
 ### Push your final RE "FinishNouns" onto the stack, ready for use.
