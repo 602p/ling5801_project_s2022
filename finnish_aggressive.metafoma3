@@ -25,7 +25,7 @@ define LexT FinnishStems NumberAndCase ;
 
 define RoundedVowelSyllable [
 #%% permute exprs(kleene) {
-    Consonant+ RoundVowel Vowel* Consonant+
+    Consonant RoundVowel Vowel Consonant
 #%% }
 ] ;
 
@@ -43,7 +43,7 @@ define RealizePluralMarker [ I -> j || Vowel {^} _ {^} Vowel ] .o. [ I -> i ] ;
 
 define RealizePartMarker [
 #%% permute exprs(kleene) {
-    T -> 0 || BiSyllabicStem ?* _
+    T -> 0 || BiSyllabicStem ? _
 #%% }
 ] .o. [ T -> t ] ;
 
@@ -57,9 +57,9 @@ define DeleteBoundaries [ {^} -> 0] ;
 
 define Rules [ 0 -> 0 ]           # No-op transducer, allows commenting out arbitrary lines below
 #%% permute lines(order) {
-         .o. VowelLowering
          .o. VowelDropping
          .o. VowelRounding
+         .o. VowelLowering
          .o. VowelShortening
 #%% }
          .o. RealizePartMarker
